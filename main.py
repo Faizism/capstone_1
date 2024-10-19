@@ -49,6 +49,7 @@ def get_confirmation(prompt):
         if confirm == 'Y':
             return True
         elif confirm == 'N':
+            print("Data Tidak Tersimpan")
             return False
         else:
             print("Input tidak valid. Masukkan Y atau N ")
@@ -128,18 +129,22 @@ def update():
 
                 category = input("Pilih field yang ingin diubah (nama produk/harga/stok): ").lower()
                 if category in ['nama produk', 'harga', 'stok'] :
-                    new_value = input(f"Masukkan {category} baru: ")
-                
-                    if get_confirmation("Apakah Data akan diubah? (Y/N):") :
+                    if category == 'nama produk':
+                        new_value = input(f"Masukkan {category} baru: ")
+                    if category == 'harga':
+                        new_value = get_valid_input(f"Masukkan {category} baru: ", validator_price, 
+                                                    "Harga harus berupa angka positif dan lebih dari 5 digit")
+                    elif category == 'stok':
+                        new_value = get_valid_input(f"Masukkan {category} baru: ", validator_stock, 
+                                                    "Stok harus berupa angka non-negatif")
+                    if get_confirmation("Apakah Data akan diubah? (Y/N): ") :
                         if category == 'nama produk':
                             item['nama produk'] = new_value
                         elif category == 'harga':
                             item['harga'] = int(new_value)
                         else:
                             item['stok'] = int(new_value)
-
-                        print("Data telah diubah.")
-                        update()
+                        print("Data berhasil diubah")
                 else :
                     print("Kategori tidak valid")
                     update()
@@ -148,10 +153,10 @@ def update():
                 update()
 
         elif menu == '2':
-            update()
+            main()
         else:
             print("Menu Tidak Tersedia")
-            update()   
+            main()   
 
 def delete():
     menu = input ('''
