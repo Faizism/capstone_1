@@ -112,97 +112,46 @@ def create():
     else:
         print("Menu Tidak Tersedia")
 
-def edit(id) :
-    index = next((index for (index, key) in enumerate(product) if key["id"] == id), None)   
-    if index is not None :
-        item = product[index]
-        while True:
-            confirmation = input(f"Apakah anda ingin mengubah data produk dengan id {item['id']} (Y/N): ").upper()
-            if confirmation == 'Y' :
-                while True :
-                    menu_edit = input('''
-                    Pilih kolom yang ingin diupdate
-                    1. Nama Produk
-                    2. Harga
-                    3. Stok
-                    4. Kembali ke Menu Edit
-                    Masukkan angka kolom yang ingin diupdate :''')
-                    if menu_edit == '1':
-                        new_name = input("Masukkan Nama Produk: ")
-                        while True:
-                            confirm_name = input("Apakah Data akan diubah? (Y/N): ").upper()
-                            if confirm_name == 'Y':
-                                item['nama produk'] = new_name
-                                print("Data Telah diubah")
-                                update()
-                            elif confirm_name == 'N':
-                                update()
-                            else:
-                                False
-                    elif menu_edit == '2':
-                        while True:
-                            new_price = input("Masukkan Harga Produk: ")
-                            if new_price.isnumeric() :
-                                while True:
-                                    confirm_name = input("Apakah Data akan diubah? (Y/N): ").upper()
-                                    if confirm_name == 'Y':
-                                        item['harga'] = new_price
-                                        print("Data Telah diubah")
-                                        update()
-                                    elif confirm_name == 'N':
-                                        update()
-                                    else:
-                                        False
-                            else :
-                                print("Input Invalid. Masukkan Harga dalam Angka")
-                    elif menu_edit == '3':
-                        while True:
-                            new_stock = input("Masukkan Stok Produk: ")
-                            if new_stock.isnumeric() :
-                                while True:
-                                    confirm_name = input("Apakah Data akan diubah? (Y/N): ").upper()
-                                    if confirm_name == 'Y':
-                                        item['stok'] = new_stock
-                                        print("Data Telah diubah")
-                                        update()
-                                    elif confirm_name == 'N':
-                                        update()
-                                    else:
-                                        False
-                            else :
-                                print("Input Invalid. Masukkan Stok dalam Angka ")
-                    elif menu_edit == '4':
-                        update()
-                    else :
-                        print("Input Tidak Valid")
-            elif confirmation == 'N':
-                return update()
-            else :
-                print("Input tidak valid. Mohon masukkan 'Y' atau 'N'.")
-
 def update():
-    menu = input('''
-    Menu 3 : Ubah Data Smartphone
-    1. Ubah Data Smartphone Bds id
-    2. Kembali ke Menu Awal
-    Masukkan angka Menu yang ingin di jalankan: ''')
-    if menu == '1':
-        try:
-            id = input('Masukkan id Produk Smartphone yang ingin diubah :').upper()
-            if len(id) == 3 and id[0] == 'P' and id[1:].isdigit():
-                filtered_id = [item for item in product if item['id']==id]
-                display(filtered_id)
-                edit(id)
-            else :
-                print("Data Produk yang Anda Cari Tidak Ada")
-        except ValueError:
-            print('Masukkan id yang Benar')
+    while True:
+        menu = input('''
+        Menu 3 : Ubah Data Smartphone
+        1. Ubah Data Smartphone Bds id
+        2. Kembali ke Menu Awal
+        Masukkan angka Menu yang ingin di jalankan: ''')
+        if menu == '1':
+            id_update = get_valid_input ('Masukkan id Produk yang ingin diubah: ',
+                                         validator_id, "Format ID Tidak Valid")
+            item = get_product_by_id(id_update, product)
+            if item:
+                display([item])
 
-    elif menu == '2':
-        main()
-    else:
-        print("Menu Tidak Tersedia")
-        update()
+                category = input("Pilih field yang ingin diubah (nama produk/harga/stok): ").lower()
+                if category in ['nama produk', 'harga', 'stok'] :
+                    new_value = input(f"Masukkan {category} baru: ")
+                
+                    if get_confirmation("Apakah Data akan diubah? (Y/N):") :
+                        if category == 'nama produk':
+                            item['nama produk'] = new_value
+                        elif category == 'harga':
+                            item['harga'] = int(new_value)
+                        else:
+                            item['stok'] = int(new_value)
+
+                        print("Data telah diubah.")
+                        update()
+                else :
+                    print("Kategori tidak valid")
+                    update()
+            else :
+                print(f"Produk dengan id {id_update} tidak ditemukan")
+                update()
+
+        elif menu == '2':
+            update()
+        else:
+            print("Menu Tidak Tersedia")
+            update()   
 
 def delete():
     menu = input ('''
