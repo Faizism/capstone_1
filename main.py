@@ -126,28 +126,28 @@ def update():
             item = get_product_by_id(id_update, product)
             if item:
                 display([item])
-
-                category = input("Pilih field yang ingin diubah (nama produk/harga/stok): ").lower()
-                if category in ['nama produk', 'harga', 'stok'] :
-                    if category == 'nama produk':
-                        new_value = input(f"Masukkan {category} baru: ")
-                    if category == 'harga':
-                        new_value = get_valid_input(f"Masukkan {category} baru: ", validator_price, 
-                                                    "Harga harus berupa angka positif dan lebih dari 5 digit")
-                    elif category == 'stok':
-                        new_value = get_valid_input(f"Masukkan {category} baru: ", validator_stock, 
-                                                    "Stok harus berupa angka non-negatif")
-                    if get_confirmation("Apakah Data akan diubah? (Y/N): ") :
+                if get_confirmation("Apakah Data akan diubah? (Y/N): ") :
+                    category = input("Pilih field yang ingin diubah (nama produk/harga/stok): ").lower()
+                    if category in ['nama produk', 'harga', 'stok'] :
                         if category == 'nama produk':
-                            item['nama produk'] = new_value
-                        elif category == 'harga':
-                            item['harga'] = int(new_value)
-                        else:
-                            item['stok'] = int(new_value)
-                        print("Data berhasil diubah")
-                else :
-                    print("Kategori tidak valid")
-                    update()
+                            new_value = input(f"Masukkan {category} baru: ")
+                        if category == 'harga':
+                            new_value = get_valid_input(f"Masukkan {category} baru: ", validator_price, 
+                                                        "Harga harus berupa angka positif dan lebih dari 5 digit")
+                        elif category == 'stok':
+                            new_value = get_valid_input(f"Masukkan {category} baru: ", validator_stock, 
+                                                        "Stok harus berupa angka non-negatif")
+                        if get_confirmation("Apakah Data akan diubah? (Y/N): ") :
+                            if category == 'nama produk':
+                                item['nama produk'] = new_value
+                            elif category == 'harga':
+                                item['harga'] = int(new_value)
+                            else:
+                                item['stok'] = int(new_value)
+                            print("Data berhasil diubah")
+                    else :
+                        print("Kategori tidak valid")
+                        update()
             else :
                 print(f"Produk dengan id {id_update} tidak ditemukan")
                 update()
@@ -165,27 +165,19 @@ def delete():
     2. Kembali ke Menu Awal
     Masukkan angka Menu yang ingin di jalankan: ''')
     if menu == '1':
-            id_del = input('Masukkan id Produk Smartphone yang ingin dihapus: ').upper()
-            if len(id_del) == 3 and id_del[0] == 'P' and id_del[1:].isdigit():
-                index = next((index for (index, d) in enumerate(product) if d["id"] == id_del), None)
-                if index is not None:
-                    item = product[index]
-                    display([item])
-                    while True :
-                        confirm = input(f"Apakah Anda yakin ingin menghapus produk dengan ID {id_del}? (Y/N): ")
-                        if confirm.upper() == 'Y':
-                            del product[index]
-                            print(f"Produk dengan ID {id_del} telah dihapus.")
-                            delete()
-                        elif confirm.upper() == 'N':
-                            delete()
-                        else :
-                            print("Input tidak valid. Masukkan Y atau N.")
-                            False
-                else :
-                    print(f"Produk dengan ID {id_del} tidak ditemukan")
-            else :
-                print("Format ID tidak valid")
+        id_delete = get_valid_input ('Masukkan id Produk yang ingin dihapus: ',
+                                         validator_id, "Format ID Tidak Valid")
+        item = get_product_by_id(id_delete, product)
+
+        if item:
+            display ([item])
+            if get_confirmation("Apakah Data akan dihapus? (Y/N): ") :
+                product.remove(item)
+                print("Data Telah Dihapus")
+            delete()
+        else:
+            print(f"Pduk dengan ID {id_delete} tidak ditemukan")
+            delete()
     elif menu == '2':
         main()
     else:
