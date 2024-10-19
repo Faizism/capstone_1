@@ -24,44 +24,59 @@ def display(items):
     for item in items :
         print(f"{item['id'].ljust(10)}|{item['nama produk'].ljust(30)}|{str(item['harga']).ljust(20)}|{str(item['stok'])}")
 
-def read():
-    menu = input('''
-    Menu 1 : Menampilkan Data Smartphone
-    1. Menampilkan Seluruh Data Smartphone
-    2. Mencari Data Smartphone Berdasarkan id
-    3. Mencari Data Smartphone Berdasarkan Harga
-    4. Kembali ke Menu Awal
-    Masukkan angka Menu yang ingin di jalankan: ''')
-    if menu == '1':
-        display(product)
-    elif menu == '2':
-        try :
-            id = input('Masukkan id Produk Smartphone yang ingin dilihat :').upper()
-            if len(id) == 3 and id[0] == 'P' and id[1:].isdigit():
-                filtered_id = [item for item in product if item['id']==id] 
-                if filtered_id :
-                    display(filtered_id)
-                else :
-                    print(f"Produk dengan id {id} tidak ditemukan")   
-        except ValueError:
-            print('Masukkan format id yang benar')
+def get_valid_input(prompt, validator, error_msg):
+    while True:
+        user_input = input(prompt).upper()
+        if validator(user_input):
+            return user_input
+        print(error_msg)
 
-    # elif menu == '3':
-    #     try:
-    #         min_price = int(input("Masukkan harga minimum: "))
-    #         max_price = int(input("Masukkan harga maksimum: "))
-    #         filtered_product = [item for item in product if min_price <= item['harga']<= max_price]
-    #         if filtered_product == []:
-    #             print(f"Smartphone pada rentang harga {min_price} - {max_price} Tidak Tersedia")
-    #         else:
-    #             display(filtered_product)
-    #     except ValueError:
-    #         print('Masukkan Harga Yang Benar')
-    elif menu == '4':
-        main()
-    else :
-        print('Menu Tidak Tersedia')
-    read()
+def validator_id(id_str):
+    return len(id_str) == 3 and id_str[0] == 'P' and id_str[1:].isdigit()
+
+def get_product_by_id(id_str, product_list):
+    return next((item for item in product_list if item["id"] == id_str), None)
+
+def validator_price(price_str):
+    return price_str.isdigit() and len(price_str)>=5 and int(price_str)>0
+
+def validator_stock(stock_str):
+    return stock_str.isdigit() and int(stock_str)>0
+
+def get_confirmation(prompt):
+    while True:
+        confirm = input(prompt).upper()
+        if confirm == 'Y':
+            return True
+        elif confirm == 'N':
+            return False
+        else:
+            print("Input tidak valid. Masukkan Y atau N ")
+
+def read():
+    while True:
+        menu = input('''
+        Menu 1 : Menampilkan Data Smartphone
+        1. Menampilkan Seluruh Data Smartphone
+        2. Mencari Data Smartphone Berdasarkan id
+        3. Kembali ke Menu Awal
+        Masukkan angka Menu yang ingin di jalankan: ''')
+        if menu == '1':
+            display(product)
+        elif menu == '2':
+            id_read = get_valid_input('Masukkan id Produk Smartphone yang ingin ditampilkan: ',
+                                    validator_id,"Format ID Tidak Valid")
+            item = get_product_by_id(id_read, product)
+            if item:
+                display([item])
+                read()
+            else:
+                print(f"Produk dengan ID {id_read} tidak ditemukan")
+                read()
+        elif menu == '3':
+            main()
+        else :
+            print('Menu Tidak Tersedia')
 
 def create():
     menu = input('''
@@ -70,46 +85,32 @@ def create():
     2. Kembali ke Menu Awal
     Masukkan angka Menu yang ingin di jalankan: ''')
     if menu == '1':
-        add_id = input("Masukkan id Produk Smartphone Baru: ").upper()
-        if len(add_id) == 3 and add_id[0] == 'P' and add_id[1:].isdigit():
-            confirm_id = any(item['id']==add_id for item in product)
-            if confirm_id :
+        while True:
+            id_create = get_valid_input ('Masukkan id Produk yang ingin ditambah: ',
+                                         validator_id, "Format ID Tidak Valid")
+            item = get_product_by_id(id_create, product)
+            if item:
                 print("Data Sudah Ada")
-                return create()
-            else : 
+                create()
+            else :
+                new_id = f'P{int(product[-1]["id"][1:]) + 1:02d}'
                 add_name = input("Masukkan Merk Smartphone & Serinya: ")
-                while True:
-                    try:  
-                        add_price= int(input("Masukkan Harga per unit: "))
-                        break
-                    except ValueError:
-                        print("Harga harus berupa angka. Silahkan coba lagi")
-                while True:
-                    try:
-                        add_stock = int(input("Masukkan Stok: "))
-                        break
-                    except ValueError :
-                        print("Stok Harus Berupa Angka. Silahkan Coba Lagi")
-                new_id = f'P{int(product[-1]['id'][1:]) + 1 :02d}'
+                add_price = int(get_valid_input("Masukkan Harga per unit: ",validator_price, "Harga harus berupa angka positif dan lebih dari 5 digit"))
+                add_stock = int(get_valid_input("Masukkan Stok: ", validator_stock, "Stok harus berupa angka non-negatif"))
 
-                while True:
-                    confirm = input("Apakah Data akan disimpan? (Y/N): ").upper()
-                    if confirm == 'Y':
-                        product.append({'id':new_id,
-                                        'nama produk':add_name,
-                                        'harga': add_price,
-                                        'stok': add_stock})
-                        print("Data Smartphone Berhasil Ditambahkan")
-                        break
-                    elif confirm == 'N':
-                        return create()
-                    else:
-                        False
+                if get_confirmation ("Apakah Data akan disimpan? (Y/N): ") :
+                    product.append({'id':new_id,
+                                    'nama produk':add_name,
+                                    'harga': add_price,
+                                    'stok': add_stock})
+                    print("Data Smartphone Berhasil Ditambahkan")
+                    create()
+                else :
+                    create()
     elif menu == '2':
         main()
     else:
         print("Menu Tidak Tersedia")
-    create()
 
 def edit(id) :
     index = next((index for (index, key) in enumerate(product) if key["id"] == id), None)   
