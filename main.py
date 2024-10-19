@@ -182,7 +182,7 @@ def edit(id) :
 def update():
     menu = input('''
     Menu 3 : Ubah Data Smartphone
-    1. Ubah Data Smartphone
+    1. Ubah Data Smartphone Bds id
     2. Kembali ke Menu Awal
     Masukkan angka Menu yang ingin di jalankan: ''')
     if menu == '1':
@@ -201,12 +201,42 @@ def update():
         main()
     else:
         print("Menu Tidak Tersedia")
-        main()
+        update()
 
 def delete():
-    """Function for delete the data
-    """
-    return
+    menu = input ('''
+    Menu 4 : Hapus Smartphone dari Daftar
+    1. Hapus Smartphone Bds id
+    2. Kembali ke Menu Awal
+    Masukkan angka Menu yang ingin di jalankan: ''')
+    if menu == '1':
+            id_del = input('Masukkan id Produk Smartphone yang ingin dihapus: ').upper()
+            if len(id_del) == 3 and id_del[0] == 'P' and id_del[1:].isdigit():
+                index = next((index for (index, d) in enumerate(product) if d["id"] == id_del), None)
+                if index is not None:
+                    item = product[index]
+                    display([item])
+                    while True :
+                        confirm = input(f"Apakah Anda yakin ingin menghapus produk dengan ID {id_del}? (Y/N): ")
+                        if confirm.upper() == 'Y':
+                            del product[index]
+                            print(f"Produk dengan ID {id_del} telah dihapus.")
+                            delete()
+                        elif confirm.upper() == 'N':
+                            delete()
+                        else :
+                            print("Input tidak valid. Masukkan Y atau N.")
+                            False
+                else :
+                    print(f"Produk dengan ID {id_del} tidak ditemukan")
+            else :
+                print("Format ID tidak valid")
+    elif menu == '2':
+        main()
+    else:
+        print("Menu Tidak Tersedia")
+        delete()
+
 
 # /===== Main Program =====/
 # Create your main program here
@@ -216,7 +246,7 @@ def main():
     1. Lihat Daftar Smartphone
     2. Tambah Smartphone Baru
     3. Ubah Data Smartphone
-    4. Hapus Smartphone dari Dafar
+    4. Hapus Smartphone dari Daftar
     5. Keluar dari Program
     """)
 
