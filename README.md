@@ -1,60 +1,65 @@
-# Python CRUD Application for [Business Domain]
+# Python CRUD Application for Smartphone Store Management
 
-A comprehensive Python application for managing [Data Entity] data with Create, Read, Update, and Delete (CRUD) operations.
+A comprehensive Python application for managing smartphone product data with Create, Read, Update, and Delete (CRUD) operations.
 
 ## Business Understanding
 
-This project caters to the [Industry/Business Domain] industry, specifically addressing the need to manage [Data Entity] data efficiently. [Data Entity] plays a crucial role in [Explain the importance of data entity in business processes].
+This project caters to the retail industry, specifically addressing the need to manage smartphone product data efficiently. Smartphone product information plays a crucial role in inventory management, sales processes, and customer service..
 
 **Benefits:**
 
-* Improved data accuracy and consistency
-* Streamlined data management processes
-* Enhanced decision-making through readily available data
-* ... (List additional benefits relevant to the business)
+* Improved data accuracy and consistency in product listings
+* Streamlined inventory management processes
+* Enhanced decision-making through readily available product information
+* Faster response times to customer inquiries about product specifications
+* Simplified product updates for price changes or new models
 
 **Target Users:**
 
-This application is designed for [Target Users] (e.g., sales representatives, inventory managers, customer support agents) within the organization to facilitate their [Tasks/Activities] related to [Data Entity].
+This application is designed for inventory managers, sales representatives, and customer support agents within the organization to facilitate their tasks related to smartphone product management.
 
 ## Features
+* **General Features:**
+   * User-friendly main menu for navigating between CRUD operations.
+   * Input validation to ensure data integrity and prevent errors.
+   * Ability to return to the main menu from any sub-menu.
+   * Clear error messages for invalid inputs or operations.
 
 * **Create:**
-    * Add new [Data Entity] entries with essential details like [List relevant fields].
-    * Implement validation rules to ensure data integrity (if applicable, e.g., unique identifiers, data type checks).
+   * Add new smartphone entries with details: product ID, name, price, and stock quantity.
+   * Automatic generation of new product IDs based on existing entries.
+   * Implement validation rules to ensure data integrity:
+      * Unique product IDs in 'P##' format
+      * Non-negative prices with at least 5 digits
+      * Positive stock quantities
+   * Confirmation prompt before saving new entries.
+
 * **Read:**
-    * Search and retrieve specific [Data Entity] records by applying filters based on [Searchable fields].
-    * Display comprehensive information for each [Data Entity] in a user-friendly format.
-    * Integrate pagination and sorting capabilities for large datasets (if applicable).
+   * Display all smartphone data in a formatted table.
+   * Search and retrieve specific smartphone records by product ID.
+   * User-friendly menu for navigating read operations
+     
 * **Update:**
-    * Modify existing [Data Entity] data to reflect changes in [Attributes/Properties].
-    * Provide clear confirmation or error messages based on update success or failure.
+   * Modify existing smartphone data: name, price, or stock quantity.
+   * Search for products to update by ID.
+   * Field-specific validation for updates.
+   * Confirmation prompts before applying changes.
+     
 * **Delete:**
-    * Allow for the removal of unwanted [Data Entity] records with appropriate authorization checks (if applicable).
-    * Implement soft delete functionality to prevent permanent data loss (optional, depending on business needs).
-    * Consider offering data archiving capabilities (optional).
-* **Security:**
-    * Implement user authentication and authorization mechanisms (if sensitive data is involved) to control access to different CRUD operations.
-    * ... (Specify additional security features as needed)
-* **Reporting:**
-    * Generate reports or summaries based on [Data Entity] data to support [Business Functions] (optional).
-    * Export data in various formats (e.g., CSV, Excel) for further analysis (optional).
+   * Remove smartphone entries by product ID.
+   * Display product details before deletion for verification.
+   * Confirmation prompt before deleting entries
 
 ## Installation
 
 1. **Prerequisites:**
-    * Python version (specify the required version)
-    * Additional dependencies (list any required packages)
+    * Python version 3.12 or later
 
 2. **Installation:**
     ```bash
-    git clone https://github.com/<your-username>/<your-repo-name>.git
-    cd <your-repo-name>
-    pip install -r requirements.txt  # If using a requirements.txt file
+    git clone https://github.com/Faizism/capstone_1.git
+    cd capstone_1
     ```
-
-3. **Database Setup (if applicable):**
-    Follow specific instructions for configuring your database connection, aligning with the business's chosen database management system.
 
 ## Usage
 
@@ -64,17 +69,18 @@ This application is designed for [Target Users] (e.g., sales representatives, in
     ```
 
 2. **CRUD Operations:**
-    * **Create:** Add a new [Data Entity] record, for example, a new customer in a customer management system, providing details like name, contact information, and preferences.
-    * **Read:** Search and retrieve customer information by name, ID, or other relevant criteria.
-    * **Update:** Modify customer details, such as updating their address or contact details.
-    * **Delete:** Remove a customer record from the system (with appropriate authorization, if applicable).
-
+    * **Create:** Add a new smartphone record to the system. Provide details like ID, product name, price, and stock quantity.
+    * **Read:** Display all smartphone records in a formatted table. Search and retrieve smartphone information by ID.
+    * **Update:** Modify existing smartphone details.Update options include product name, price, or stock quantity. Input validation for updated fields
+    * **Delete:** Remove a smartphone record from the system. Confirmation prompt before deletion to prevent accidental removals.
 ## Data Model
-This project utilizes a [Data Structure] (e.g., relational database, JSON documents) to represent [Data Entity] data. The following fields are typically stored:
-   * [Field 1]: (Data type) - Description of the field's purpose in the business context.
-   * [Field 2]: (Data type) - Description of the field's purpose in the business context.
-   * ... (List all relevant fields)
+This project utilizes a list of dictionaries to represent smartphone data. Each smartphone record is stored as a dictionary within the list, with the following fields:
+
+   * id: (String) - Unique identifier for each smartphone, format 'P##'.
+   * nama produk: (String) - Name and series of the smartphone.
+   * harga: (Integer) - Price of the smartphone in Indonesian Rupiah (IDR).
+   * stok: (Integer) - Current stock quantity of the smartphone.
 
 ## Contributing
-We welcome contributions to this project! Please feel free to open a pull request, sent to [your_email] or submit an issue if you encounter any problems or have suggestions for improvements.
+We welcome contributions to this project! Please feel free to open a pull request, sent to ismail1.faiz1@gmail.com or submit an issue if you encounter any problems or have suggestions for improvements.
 
