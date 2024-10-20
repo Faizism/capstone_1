@@ -112,6 +112,7 @@ def create():
         main()
     else:
         print("Menu Tidak Tersedia")
+        create()
 
 def update():
     while True:
