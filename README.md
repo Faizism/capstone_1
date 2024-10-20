@@ -81,14 +81,6 @@ This project utilizes a list of dictionaries to represent smartphone data. Each 
    * harga: (Integer) - Price of the smartphone in Indonesian Rupiah (IDR).
    * stok: (Integer) - Current stock quantity of the smartphone.
 
-Example of a smartphone record:
-    ```bash
-    'id': 'P01',
-    'nama produk': 'Redmi 12',
-    'harga': 2_000_000,
-    'stok': 12
-    ```
-
 ## Contributing
 We welcome contributions to this project! Please feel free to open a pull request, sent to ismail1.faiz1@gmail.com or submit an issue if you encounter any problems or have suggestions for improvements.
 
