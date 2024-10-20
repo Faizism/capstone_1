@@ -19,12 +19,32 @@ product = [{'id' : 'P01', 'nama produk' : 'Redmi 12', 'harga': 2_000_000, 'stok'
 # /===== Feature Program =====/
 # Create your feature program here
 def display(items):
+    """ Menampilkan daftar smartphone yang tersedia di toko.
+
+    Args:
+        items (list): Daftar dictionary yang berisi informasi smartphone.
+                      Setiap dictionary berisi:
+                      - 'id': string (id produk)
+                      - 'nama produk': string (nama smartphone)
+                      - 'harga': int atau float (harga smartphone)
+                      - 'stok': int (jumlah stok tersedia)
+    """
     print("Daftar Smartphone di Toko Berkah Jaya\n")
     print(f"{('id').ljust(10)}|{('Nama Smartphone').ljust(30)}|{('Harga').ljust(20)}|Stok")
     for item in items :
         print(f"{item['id'].ljust(10)}|{item['nama produk'].ljust(30)}|{str(item['harga']).ljust(20)}|{str(item['stok'])}")
 
 def get_valid_input(prompt, validator, error_msg):
+    """ Meminta input dari pengguna hingga input tersebut valid.
+
+    Args:
+        prompt (str): Pesan yang ditampilkan untuk meminta input dari pengguna.
+        validator (function): Fungsi yang menerima input dan mengembalikan True jika input valid, False jika tidak.
+        error_msg (str): Pesan error yang ditampilkan jika input tidak valid
+
+    Returns:
+        str : Input pengguna yang valid setelah lolos pengecekan oleh
+    """
     while True:
         user_input = input(prompt).upper()
         if validator(user_input):
@@ -32,18 +52,64 @@ def get_valid_input(prompt, validator, error_msg):
         print(error_msg)
 
 def validator_id(id_str):
+    """ Memvalidasi apakah string id sesuai dengan format yang diharapkan.
+
+    Args:
+        id_str (str): String yang merepresentasikan id untuk divalidasi
+
+    Returns:
+        bool: True jika id valid (panjangnya 3, dimulai dengan 'P', dan diikuti oleh angka), 
+              False jika tidak.
+    """
     return len(id_str) == 3 and id_str[0] == 'P' and id_str[1:].isdigit()
 
 def get_product_by_id(id_str, product_list):
+    """ Mendapatkat item dari produk berdasarkan ID dari daftar produk.
+
+    Args:
+        id_str (str): ID produk yang akan dicari.
+        product_list (list): Daftar produk, di mana setiap produk berupa dictionary
+                             dengan kunci "id" dan informasi lainnya
+
+    Returns:
+        dict or None: Dictionary berisi data produk jika ID ditemukan, 
+                      atau None jika tidak ada produk dengan ID yang sesuai.
+    """
     return next((item for item in product_list if item["id"] == id_str), None)
 
 def validator_price(price_str):
+    """ Memvalidasi apakah string price sesuai dengan format yang diharapkan
+
+    Args:
+        price_str (str): String yang merepresentasikan price untuk divalidasi
+
+    Returns:
+        bool: True jika price valid (input berupa digit angka, panjangnya lebih dari sama dengan 5, dan berupa bilangan positif), 
+              False jika tidak.
+    """
     return price_str.isdigit() and len(price_str)>=5 and int(price_str)>0
 
 def validator_stock(stock_str):
+    """ Memvalidasi apakah string stock sesuai dengan format yang diharapkan
+
+    Args:
+        stock_str (str): String yang merepresentasikan stock untuk divalidasi
+
+    Returns:
+        bool: True jika stock valid (input berupa digit angka, dan berupa bilangan positif), 
+              False jika tidak.
+    """
     return stock_str.isdigit() and int(stock_str)>0
 
 def get_confirmation(prompt):
+    """ Meminta konfirmasi dari pengguna dalam bentuk input Y atau N.
+
+    Args:
+        prompt (str): Pesan yang ditampilkan untuk meminta konfirmasi dari pengguna.
+
+    Returns:
+        bool: True jika pengguna mengonfirmasi dengan 'Y', False jika pengguna menolak dengan 'N'.
+    """
     while True:
         confirm = input(prompt).upper()
         if confirm == 'Y':
@@ -55,6 +121,18 @@ def get_confirmation(prompt):
             print("Input tidak valid. Masukkan Y atau N ")
 
 def read():
+    """ 
+    Menampilkan menu untuk membaca data smartphone dari daftar produk.
+
+    Berdasarkan input pengguna, fungsi ini menjalankan opsi yang sesuai:
+    - Jika memilih opsi 1, seluruh data smartphone akan ditampilkan.
+    - Jika memilih opsi 2, pengguna diminta memasukkan ID, lalu mencari dan menampilkan data smartphone dengan ID tersebut.
+    - Jika memilih opsi 3, fungsi akan kembali ke menu awal.
+    - Jika input tidak valid, fungsi menampilkan pesan kesalahan.
+
+    Fungsi ini berjalan dalam loop hingga pengguna memilih untuk kembali ke menu awal.
+
+    """
     while True:
         menu = input('''
         Menu 1 : Menampilkan Data Smartphone
@@ -80,6 +158,18 @@ def read():
             print('Menu Tidak Tersedia')
 
 def create():
+    """
+    Menampilkan menu untuk menambahkan data smartphone ke dalam daftar produk.
+
+    Alur fungsi:
+    - Jika memilih opsi 1, pengguna akan diminta untuk memasukkan ID produk, nama, harga, dan stok. 
+      Sebelum data ditambahkan, fungsi memeriksa apakah ID yang dimasukkan sudah ada di daftar produk.
+      Jika ID sudah ada, maka pengguna akan diberitahu bahwa data sudah ada.
+    - Jika ID belum ada, fungsi akan menambahkan data baru berdasarkan input pengguna.
+    - Pengguna akan diminta konfirmasi sebelum data disimpan.
+    - Jika memilih opsi 2, fungsi akan kembali ke menu awal.
+    - Jika input tidak valid, fungsi menampilkan pesan kesalahan.
+    """
     menu = input('''
     Menu 2 : Menambahkan Daftar Smartphone
     1. Menambah Data Smartphone Baru
@@ -115,6 +205,16 @@ def create():
         create()
 
 def update():
+    """
+    Menampilkan menu untuk memperbarui data smartphone berdasarkan ID.
+
+    Alur fungsi:
+    1. Pengguna diminta untuk memasukkan ID produk.
+    2. Jika produk ditemukan, data ditampilkan dan pengguna dapat memilih kategori (nama produk, harga, atau stok) yang ingin diubah.
+    3. Setelah pengguna mengonfirmasi perubahan, data akan diperbarui dengan nilai baru.
+    4. Jika input kategori atau ID tidak valid, pengguna akan diberi pesan kesalahan dan diminta input ulang.
+
+    """
     while True:
         menu = input('''
         Menu 3 : Ubah Data Smartphone
@@ -160,6 +260,16 @@ def update():
             main()   
 
 def delete():
+    """
+    Menampilkan menu untuk menghapus data smartphone dari daftar produk berdasarkan ID.
+
+    Alur fungsi:
+    1. Pengguna diminta untuk memasukkan ID produk.
+    2. Jika produk ditemukan, data produk ditampilkan dan pengguna diminta konfirmasi sebelum penghapusan.
+    3. Jika penghapusan dikonfirmasi, data produk akan dihapus dari daftar.
+    4. Jika ID tidak valid atau produk tidak ditemukan, pengguna diberi pesan kesalahan.
+
+    """
     menu = input ('''
     Menu 4 : Hapus Smartphone dari Daftar
     1. Hapus Smartphone Bds id
@@ -189,6 +299,14 @@ def delete():
 # /===== Main Program =====/
 # Create your main program here
 def main():
+    """
+    Program utama untuk mengelola database penjualan Toko Smartphone Berkah Jaya.
+
+    Berdasarkan input pengguna, fungsi akan menjalankan tindakan yang sesuai dengan memanggil fungsi `read()`, `create()`, `update()`, atau `delete()`.
+    Jika pengguna memilih untuk keluar, program akan menampilkan pesan perpisahan dan berhenti.
+    Jika input tidak valid, pengguna akan diminta untuk menginput ulang hingga pilihan yang valid dimasukkan.
+
+    """
     print("""Database Penjualan Toko Smartphone Berkah Jaya
     Pilih menu yang ingin di jalankan
     1. Lihat Daftar Smartphone
