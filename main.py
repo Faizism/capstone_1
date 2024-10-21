@@ -286,6 +286,7 @@ def delete():
         2. Kembali ke Menu Awal
         Masukkan angka Menu yang ingin di jalankan: ''')
         if menu == '1':
+            display(product)
             id_delete = get_valid_input ('Masukkan id Produk yang ingin dihapus: ',
                                             validator_id, "Format ID Tidak Valid")
             item = get_product_by_id(id_delete, product)
@@ -302,6 +303,65 @@ def delete():
         else:
             print("Menu Tidak Tersedia")
 
+def sorting():
+    while True :
+        menu = input('''
+        Menu 5: Urutan Smartphone
+        1. Sortir daftar produk berdasarkan harga
+        2. Sortir daftar produk berdasarkan stok
+        3. Sortir daftar produk berdasarkan nama
+        4. Kembali ke menu awal
+        Masukkan angka Menu yang ingin dijalankan: ''')
+        if menu == '1' :
+            while True :
+                menu_sort_price = input('''
+                1. Sortir Smartphone dari termurah
+                2. Sortir Smartphone dari termahal
+                3. Kembali ke menu sortir
+                Masukkan angka Menu yang ingin dijalankan: ''')
+                if menu_sort_price == '1':
+                    display(sorted(product, key=lambda x : x['harga']))
+                elif menu_sort_price == '2' :
+                    display(sorted(product, key=lambda x : -x['harga']))
+                elif menu_sort_price == '3':
+                    break
+                else :
+                    print("Menu Tidak Tersedia")
+        elif menu == '2' :
+            while True :
+                menu_sort_stock = input('''
+                1. Sortir Smartphone dari stok terkecil
+                2. Sortir Smartphone dari stok terbesar
+                3. Kembali ke menu sortir
+                Masukkan angka Menu yang ingin dijalankan: ''')
+                if menu_sort_stock == '1':
+                    display(sorted(product, key=lambda x : x['stok']))
+                elif menu_sort_stock == '2' :
+                    display(sorted(product, key=lambda x : -x['stok']))
+                elif menu_sort_stock == '3':
+                    break
+                else :
+                    print("Menu Tidak Tersedia")
+        elif menu == '3' :
+            while True :
+                menu_sort_name = input('''
+                1. Sortir Smartphone dari A-Z
+                2. Sortir Smartphone dari Z-A
+                3. Kembali ke menu sortir
+                Masukkan angka Menu yang ingin dijalankan: ''')
+                if menu_sort_name == '1':
+                    display(sorted(product, key=lambda x : x['nama produk']))
+                elif menu_sort_name == '2' :
+                    display(sorted(product, key=lambda x : -x['nama produk']))
+                elif menu_sort_name == '3':
+                    break
+                else :
+                    print("Menu Tidak Tersedia")
+        elif menu == '4':
+            break
+        else :
+            print("Menu Tidak Tersedia")
+        
 
 # /===== Main Program =====/
 # Create your main program here
@@ -321,7 +381,8 @@ def main():
         2. Tambah Smartphone Baru
         3. Ubah Data Smartphone
         4. Hapus Smartphone dari Daftar
-        5. Keluar dari Program
+        5. Sortir Daftar Produk
+        6. Keluar dari Program
         """)
         input_user = input("Masukkan angka Menu yang ingin dijalankan: ")
         if input_user == "1":
@@ -333,6 +394,8 @@ def main():
         elif input_user == "4":
             delete()
         elif input_user == "5":
+            sorting()
+        elif input_user == "6":
             print("Thank You and Goodbye")
             break
         else:
