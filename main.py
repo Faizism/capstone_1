@@ -7,8 +7,10 @@
 
 # /************************************/
 
+# /==== Importing Module ====/
+from datetime import datetime
+
 # /===== Data Model =====/
-# Create your data model here
 
 product = [{'id' : 'P01',  'nama produk' : 'Redmi 12', 'harga': 2_000_000, 'stok' : 12},
 {'id' : 'P02', 'nama produk' : 'Samsung Galaxy A34 5G', 'harga':4_500_000, 'stok' : 18 },
@@ -16,8 +18,15 @@ product = [{'id' : 'P01',  'nama produk' : 'Redmi 12', 'harga': 2_000_000, 'stok
 {'id' : 'P04', 'nama produk' : 'iPhone 14', 'harga':14_000_000, 'stok' : 10 },
 {'id' : 'P05', 'nama produk' : 'Samsung Galaxy S23 Ultra', 'harga':20_000_000, 'stok' : 15 }]
 
+change_log = { 'P001': [
+        {'waktu': '2024-10-21 12:30', 'kategori': 'harga', 'data lama': 950000, 'data baru': 1000000},
+        {'waktu': '2024-10-22 09:15', 'kategori': 'stok', 'data lama': 20, 'data baru': 12}
+    ],
+    'P002': [
+        {'waktu': '2024-10-22 11:45', 'kategori': 'nama', 'data lama': 'Samsung Galaxy A34', 'data baru': 'Samsung Galaxy A34 5G'}
+    ]}
+
 # /===== Feature Program =====/
-# Create your feature program here
 def display(items):
     """ Menampilkan daftar smartphone yang tersedia di toko.
 
@@ -119,6 +128,30 @@ def get_confirmation(prompt):
             return False
         else:
             print("Input tidak valid. Masukkan Y atau N ")
+
+
+def log_change(product_id, field, old_value, new_value):
+    """
+    Menambahkan catatan perubahan ke dalam log perubahan produk.
+
+    Args:
+        product_id (str): ID produk yang mengalami perubahan.
+        field (str): Nama field yang diubah (misalnya, 'harga', 'stok').
+        old_value: Nilai sebelum perubahan.
+        new_value: Nilai setelah perubahan.
+    
+    Fungsi ini akan mencatat perubahan dalam format:
+    {'waktu': waktu_perubahan, 'kategori': field, 'data lama': old_value, 'data baru': new_value}
+    """
+    if product_id not in change_log:
+        change_log[product_id] = []
+    
+    change_log[product_id].append({
+        'waktu': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'kategori': field,
+        'data lama': old_value,
+        'data baru': new_value
+    })
 
 def read():
     """ 
@@ -252,6 +285,7 @@ def update():
                             new_value = get_valid_input(f"Masukkan {category} baru: ", validator_stock, 
                                                         "Stok harus berupa angka non-negatif")
                         if get_confirmation("Apakah Data akan diubah? (Y/N): "):
+                            log_change(id_update, category, item[category], new_value)
                             if category == 'nama produk':
                                 item['nama produk'] = new_value
                             elif category == 'harga':
@@ -259,6 +293,7 @@ def update():
                             else:
                                 item['stok'] = int(new_value)
                             print("Data berhasil diubah")
+                            print(change_log[id_update][-1])
                     else:
                         print("Kategori tidak valid")
             else:
@@ -304,9 +339,23 @@ def delete():
             print("Menu Tidak Tersedia")
 
 def sorting():
+    """
+    Fungsi untuk menampilkan menu pengurutan (sorting) smartphone berdasarkan harga, stok, atau nama
+    Menu:
+    1. Urutkan daftar produk berdasarkan harga.
+        - Pilihan ini memungkinkan pengguna mengurutkan produk dari harga termurah atau termahal.
+    2. Urutkan daftar produk berdasarkan stok.
+        - Pilihan ini memungkinkan pengguna mengurutkan produk dari stok terkecil atau terbesar.
+    3. Urutkan daftar produk berdasarkan nama.
+        - Pilihan ini memungkinkan pengguna mengurutkan produk berdasarkan nama dari A-Z atau Z-A.
+    4. Kembali ke menu utama.
+        - Pilihan ini mengakhiri fungsi `sorting()` dan kembali ke menu awal program.
+
+    Setiap sub-menu juga memiliki opsi untuk kembali ke menu pengurutan.
+    """
     while True :
         menu = input('''
-        Menu 5: Urutan Smartphone
+        Menu 5: Penyortiran Produk Smartphone
         1. Sortir daftar produk berdasarkan harga
         2. Sortir daftar produk berdasarkan stok
         3. Sortir daftar produk berdasarkan nama
@@ -361,10 +410,46 @@ def sorting():
             break
         else :
             print("Menu Tidak Tersedia")
+
+def history():
+    """ 
+    Menampilkan seluruh riwayat perubahan produk
+
+    Menu ini memberikan dua pilihan:
+    1. Menampilkan seluruh riwayat perubahan yang telah dicatat.
+    2. Menampilkan riwayat perubahan berdasarkan ID produk tertentu.
+
+    """
+    while True :
+        menu = input('''
+        Menu 6: Riwayat Perubahan
+        1. Tampilkan Seluruh Riwayat Perubahan
+        2. Tampilkan Riwayat Perubahan Berdasarkan ID
+        3. Kembali ke Main menu
+        Masukkan angka Menu yang ingin dijalankan: ''')
+        if menu == '1':
+            for product_id, logs in change_log.items():
+                print(f"\nRiwayat perubahan untuk Produk ID: {product_id}")
+                for log in logs:
+                    print(f"Waktu: {log['waktu']}, Kategori: {log['kategori']}, Data Lama: {log['data lama']}, Data Baru: {log['data baru']}")
+        elif menu == '2':
+            id_history = get_valid_input ('Masukkan id Produk yang ingin dilihat riwayat perubahannya: ',
+                                            validator_id, "Format ID Tidak Valid")
+            item = get_product_by_id(id_history, product)
+            if id_history in change_log:
+                print(f"Riwayat perubahan untuk Produk ID: {id_history}")
+                for log in change_log[id_history]:
+                    print(f"Waktu: {log['waktu']}, Kategori: {log['kategori']}, Data Lama: {log['data lama']}, Data Baru: {log['data baru']}")
+            else:
+                print(f"Tidak ada riwayat perubahan untuk Produk ID: {id_history}")
+        elif menu == '3':
+            break
+        else :
+            print("Menu Tidak Tersedia")
+
         
 
 # /===== Main Program =====/
-# Create your main program here
 def main():
     """
     Program utama untuk mengelola database penjualan Toko Smartphone Berkah Jaya.
@@ -382,7 +467,8 @@ def main():
         3. Ubah Data Smartphone
         4. Hapus Smartphone dari Daftar
         5. Sortir Daftar Produk
-        6. Keluar dari Program
+        6. Lihat Riwayat Perubahan
+        7. Keluar dari Program
         """)
         input_user = input("Masukkan angka Menu yang ingin dijalankan: ")
         if input_user == "1":
@@ -396,6 +482,8 @@ def main():
         elif input_user == "5":
             sorting()
         elif input_user == "6":
+            history()
+        elif input_user == "7":
             print("Thank You and Goodbye")
             break
         else:
