@@ -135,25 +135,23 @@ def read():
     """
     while True:
         menu = input('''
-        Menu 1 : Menampilkan Data Smartphone
-        1. Menampilkan Seluruh Data Smartphone
-        2. Mencari Data Smartphone Berdasarkan id
-        3. Kembali ke Menu Awal
-        Masukkan angka Menu yang ingin di jalankan: ''')
+            Menu 1 : Menampilkan Data Smartphone
+            1. Menampilkan Seluruh Data Smartphone
+            2. Mencari Data Smartphone Berdasarkan id
+            3. Kembali ke Menu Awal
+            Masukkan angka Menu yang ingin di jalankan: ''')
         if menu == '1':
             display(product)
         elif menu == '2':
             id_read = get_valid_input('Masukkan id Produk Smartphone yang ingin ditampilkan: ',
-                                    validator_id,"Format ID Tidak Valid")
+                                        validator_id,"Format ID Tidak Valid")
             item = get_product_by_id(id_read, product)
             if item:
                 display([item])
-                read()
             else:
                 print(f"Produk dengan ID {id_read} tidak ditemukan")
-                read()
         elif menu == '3':
-            main()
+            break
         else :
             print('Menu Tidak Tersedia')
 
@@ -170,19 +168,18 @@ def create():
     - Jika memilih opsi 2, fungsi akan kembali ke menu awal.
     - Jika input tidak valid, fungsi menampilkan pesan kesalahan.
     """
-    menu = input('''
-    Menu 2 : Menambahkan Daftar Smartphone
-    1. Menambah Data Smartphone Baru
-    2. Kembali ke Menu Awal
-    Masukkan angka Menu yang ingin di jalankan: ''')
-    if menu == '1':
-        while True:
+    while True:
+        menu = input('''
+        Menu 2 : Menambahkan Daftar Smartphone
+        1. Menambah Data Smartphone Baru
+        2. Kembali ke Menu Awal
+        Masukkan angka Menu yang ingin di jalankan: ''')
+        if menu == '1':
             id_create = get_valid_input ('Masukkan id Produk yang ingin ditambah: ',
-                                         validator_id, "Format ID Tidak Valid")
+                                        validator_id, "Format ID Tidak Valid")
             item = get_product_by_id(id_create, product)
             if item:
                 print("Data Sudah Ada")
-                create()
             else :
                 new_id = f'P{int(product[-1]["id"][1:]) + 1:02d}'
                 add_name = input("Masukkan Merk Smartphone & Serinya: ")
@@ -195,14 +192,10 @@ def create():
                                     'harga': add_price,
                                     'stok': add_stock})
                     print("Data Smartphone Berhasil Ditambahkan")
-                    create()
-                else :
-                    create()
-    elif menu == '2':
-        main()
-    else:
-        print("Menu Tidak Tersedia")
-        create()
+        elif menu == '2':
+            break
+        else:
+            print("Menu Tidak Tersedia")
 
 def update():
     """
@@ -215,30 +208,29 @@ def update():
     4. Jika input kategori atau ID tidak valid, pengguna akan diberi pesan kesalahan dan diminta input ulang.
 
     """
-    while True:
+    while True :
         menu = input('''
         Menu 3 : Ubah Data Smartphone
         1. Ubah Data Smartphone Berdasarkan id
         2. Kembali ke Menu Awal
         Masukkan angka Menu yang ingin di jalankan: ''')
         if menu == '1':
-            id_update = get_valid_input ('Masukkan id Produk yang ingin diubah: ',
-                                         validator_id, "Format ID Tidak Valid")
+            id_update = get_valid_input('Masukkan id Produk yang ingin diubah: ', validator_id, "Format ID Tidak Valid")
             item = get_product_by_id(id_update, product)
             if item:
                 display([item])
-                if get_confirmation("Apakah Data akan diubah? (Y/N): ") :
+                if get_confirmation("Apakah Data akan diubah? (Y/N): "):
                     category = input("Pilih field yang ingin diubah (nama produk/harga/stok): ").lower()
-                    if category in ['nama produk', 'harga', 'stok'] :
+                    if category in ['nama produk', 'harga', 'stok']:
                         if category == 'nama produk':
                             new_value = input(f"Masukkan {category} baru: ")
-                        if category == 'harga':
+                        elif category == 'harga':
                             new_value = get_valid_input(f"Masukkan {category} baru: ", validator_price, 
                                                         "Harga harus berupa angka positif dan lebih dari 5 digit")
                         elif category == 'stok':
                             new_value = get_valid_input(f"Masukkan {category} baru: ", validator_stock, 
                                                         "Stok harus berupa angka non-negatif")
-                        if get_confirmation("Apakah Data akan diubah? (Y/N): ") :
+                        if get_confirmation("Apakah Data akan diubah? (Y/N): "):
                             if category == 'nama produk':
                                 item['nama produk'] = new_value
                             elif category == 'harga':
@@ -246,18 +238,14 @@ def update():
                             else:
                                 item['stok'] = int(new_value)
                             print("Data berhasil diubah")
-                    else :
+                    else:
                         print("Kategori tidak valid")
-                        update()
-            else :
+            else:
                 print(f"Produk dengan id {id_update} tidak ditemukan")
-                update()
-
         elif menu == '2':
-            main()
+            break
         else:
             print("Menu Tidak Tersedia")
-            update()   
 
 def delete():
     """
@@ -270,30 +258,28 @@ def delete():
     4. Jika ID tidak valid atau produk tidak ditemukan, pengguna diberi pesan kesalahan.
 
     """
-    menu = input ('''
-    Menu 4 : Hapus Smartphone dari Daftar
-    1. Hapus Smartphone Berdasarkan id
-    2. Kembali ke Menu Awal
-    Masukkan angka Menu yang ingin di jalankan: ''')
-    if menu == '1':
-        id_delete = get_valid_input ('Masukkan id Produk yang ingin dihapus: ',
-                                         validator_id, "Format ID Tidak Valid")
-        item = get_product_by_id(id_delete, product)
+    while True :
+        menu = input ('''
+        Menu 4 : Hapus Smartphone dari Daftar
+        1. Hapus Smartphone Berdasarkan id
+        2. Kembali ke Menu Awal
+        Masukkan angka Menu yang ingin di jalankan: ''')
+        if menu == '1':
+            id_delete = get_valid_input ('Masukkan id Produk yang ingin dihapus: ',
+                                            validator_id, "Format ID Tidak Valid")
+            item = get_product_by_id(id_delete, product)
 
-        if item:
-            display ([item])
-            if get_confirmation("Apakah Data akan dihapus? (Y/N): ") :
-                product.remove(item)
-                print("Data Telah Dihapus")
-            delete()
+            if item:
+                display ([item])
+                if get_confirmation("Apakah Data akan dihapus? (Y/N): ") :
+                    product.remove(item)
+                    print("Data Telah Dihapus")
+            else:
+                print(f"Pduk dengan ID {id_delete} tidak ditemukan")
+        elif menu == '2':
+            break
         else:
-            print(f"Pduk dengan ID {id_delete} tidak ditemukan")
-            delete()
-    elif menu == '2':
-        main()
-    else:
-        print("Menu Tidak Tersedia")
-        delete()
+            print("Menu Tidak Tersedia")
 
 
 # /===== Main Program =====/
@@ -307,29 +293,29 @@ def main():
     Jika input tidak valid, pengguna akan diminta untuk menginput ulang hingga pilihan yang valid dimasukkan.
 
     """
-    print("""Database Penjualan Toko Smartphone Berkah Jaya
-    Pilih menu yang ingin di jalankan
-    1. Lihat Daftar Smartphone
-    2. Tambah Smartphone Baru
-    3. Ubah Data Smartphone
-    4. Hapus Smartphone dari Daftar
-    5. Keluar dari Program
-    """)
-
-    input_user = input("Masukkan angka Menu yang ingin dijalankan: ")
-    if input_user == "1":
-        read()
-    elif input_user == "2":
-        create()
-    elif input_user == "3":
-        update()
-    elif input_user == "4":
-        delete()
-    elif input_user == "5":
-        print("Thank You and Goodbye")
-    else:
-        print("Input is not valid !")
-        main()
+    while True :
+        print("""Database Penjualan Toko Smartphone Berkah Jaya
+        Pilih menu yang ingin di jalankan
+        1. Lihat Daftar Smartphone
+        2. Tambah Smartphone Baru
+        3. Ubah Data Smartphone
+        4. Hapus Smartphone dari Daftar
+        5. Keluar dari Program
+        """)
+        input_user = input("Masukkan angka Menu yang ingin dijalankan: ")
+        if input_user == "1":
+            read()
+        elif input_user == "2":
+            create()
+        elif input_user == "3":
+            update()
+        elif input_user == "4":
+            delete()
+        elif input_user == "5":
+            print("Thank You and Goodbye")
+            break
+        else:
+            print("Input is not valid")
 
 
 if __name__ == "__main__":
