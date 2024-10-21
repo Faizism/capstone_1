@@ -218,7 +218,7 @@ def update():
     while True:
         menu = input('''
         Menu 3 : Ubah Data Smartphone
-        1. Ubah Data Smartphone Bds id
+        1. Ubah Data Smartphone Berdasarkan id
         2. Kembali ke Menu Awal
         Masukkan angka Menu yang ingin di jalankan: ''')
         if menu == '1':
@@ -257,7 +257,7 @@ def update():
             main()
         else:
             print("Menu Tidak Tersedia")
-            main()   
+            update()   
 
 def delete():
     """
@@ -272,7 +272,7 @@ def delete():
     """
     menu = input ('''
     Menu 4 : Hapus Smartphone dari Daftar
-    1. Hapus Smartphone Bds id
+    1. Hapus Smartphone Berdasarkan id
     2. Kembali ke Menu Awal
     Masukkan angka Menu yang ingin di jalankan: ''')
     if menu == '1':
