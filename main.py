@@ -10,7 +10,7 @@
 # /===== Data Model =====/
 # Create your data model here
 
-product = [{'id' : 'P01', 'nama produk' : 'Redmi 12', 'harga': 2_000_000, 'stok' : 12},
+product = [{'id' : 'P01',  'nama produk' : 'Redmi 12', 'harga': 2_000_000, 'stok' : 12},
 {'id' : 'P02', 'nama produk' : 'Samsung Galaxy A34 5G', 'harga':4_500_000, 'stok' : 18 },
 {'id' : 'P03', 'nama produk' : 'Google Pixel 7a', 'harga':6_000_000, 'stok' : 8 },
 {'id' : 'P04', 'nama produk' : 'iPhone 14', 'harga':14_000_000, 'stok' : 10 },
@@ -137,9 +137,10 @@ def read():
         menu = input('''
             Menu 1 : Menampilkan Data Smartphone
             1. Menampilkan Seluruh Data Smartphone
-            2. Mencari Data Smartphone Berdasarkan id
-            3. Mencari Data Smartphone Berdasarkan Harga
-            4. Kembali ke Menu Awal
+            2. Mencari Data Smartphone Berdasarkan ID
+            3. Mencari Data Smartphone Berdasarkan Nama Merk
+            4. Mencari Data Smartphone Berdasarkan Harga
+            5. Kembali ke Menu Awal
             Masukkan angka Menu yang ingin di jalankan: ''')
         if menu == '1':
             display(product)
@@ -152,9 +153,17 @@ def read():
             else:
                 print(f"Produk dengan ID {id_read} tidak ditemukan")
         elif menu == '3':
-            price_read_min = get_valid_input('Masukkan Harga Minimum Smartphone yang anda cari: ',
+            name_read = input("Masukkan Merk Smartphone yang Ingin dicari: ")
+            filter_name = [item for item in product if item["nama produk"].split()[0].lower() == name_read.lower()]
+            if filter_name == [] :
+                print(f"Smartphone dengan merk {name_read} Tidak Tersedia")
+            else :
+                print(f"Berikut produk dengan Merk {name_read}: ")
+                display(filter_name)
+        elif menu == '4':
+            price_read_min = get_valid_input('Masukkan Harga Minimum Smartphone yang ingin dicari: ',
                                             validator_price,"Format Harga Tidak Sesuai")
-            price_read_max = get_valid_input('Masukkan Harga Maksimum Smartphone yang anda cari: ',
+            price_read_max = get_valid_input('Masukkan Harga Maksimum Smartphone yang ingin dicari: ',
                                             validator_price,"Format Harga Tidak Sesuai")
             filter_price = [item for item in product if int(price_read_min) <= item['harga']<= int(price_read_max)]
             if filter_price == []:
@@ -162,7 +171,7 @@ def read():
             else :
                 print(f"Berikut Smartphone pada rentang harga {price_read_min} - {price_read_max}")
                 display(filter_price)
-        elif menu == '4':
+        elif menu == '5':
             break
         else :
             print('Menu Tidak Tersedia')
