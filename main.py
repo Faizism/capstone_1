@@ -138,7 +138,8 @@ def read():
             Menu 1 : Menampilkan Data Smartphone
             1. Menampilkan Seluruh Data Smartphone
             2. Mencari Data Smartphone Berdasarkan id
-            3. Kembali ke Menu Awal
+            3. Mencari Data Smartphone Berdasarkan Harga
+            4. Kembali ke Menu Awal
             Masukkan angka Menu yang ingin di jalankan: ''')
         if menu == '1':
             display(product)
@@ -151,6 +152,17 @@ def read():
             else:
                 print(f"Produk dengan ID {id_read} tidak ditemukan")
         elif menu == '3':
+            price_read_min = get_valid_input('Masukkan Harga Minimum Smartphone yang anda cari: ',
+                                            validator_price,"Format Harga Tidak Sesuai")
+            price_read_max = get_valid_input('Masukkan Harga Maksimum Smartphone yang anda cari: ',
+                                            validator_price,"Format Harga Tidak Sesuai")
+            filter_price = [item for item in product if int(price_read_min) <= item['harga']<= int(price_read_max)]
+            if filter_price == []:
+                print(f"Smartphone pada rentang harga {price_read_min} - {price_read_max} Tidak Tersedia")
+            else :
+                print(f"Berikut Smartphone pada rentang harga {price_read_min} - {price_read_max}")
+                display(filter_price)
+        elif menu == '4':
             break
         else :
             print('Menu Tidak Tersedia')
